@@ -9,6 +9,10 @@ import { ShoppingListEditComponent } from './shopping-list-edit/shopping-list-ed
     ShoppingListEditComponent,
   ],
   imports: [],
+  exports: [
+    ShoppingListComponent,
+    ShoppingListEditComponent,
+  ],
   providers: [],
   bootstrap: []
 })

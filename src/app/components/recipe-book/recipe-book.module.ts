@@ -13,6 +13,12 @@ import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
     RecipeDetailComponent
   ],
   imports: [],
+  exports: [
+    RecipeBookComponent,
+    RecipeListComponent,
+    RecipeItemComponent,
+    RecipeDetailComponent
+  ],
   providers: [],
   bootstrap: []
 })
