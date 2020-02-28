@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from  '@angular/common';
 
 import { RecipeBookComponent } from './recipe-book/recipe-book.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
@@ -12,7 +13,9 @@ import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
     RecipeItemComponent,
     RecipeDetailComponent
   ],
-  imports: [],
+  imports: [
+    CommonModule
+  ],
   exports: [
     RecipeBookComponent,
     RecipeListComponent,
