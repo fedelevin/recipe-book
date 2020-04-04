@@ -7,7 +7,7 @@ import { ShoppingListEditComponent } from './shopping-list-edit/shopping-list-ed
 @NgModule({
   declarations: [
     ShoppingListComponent,
-    ShoppingListEditComponent,
+    ShoppingListEditComponent
   ],
   imports: [
     CommonModule
