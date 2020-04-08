@@ -6,13 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  section: string = "recipes";
+  loadedFeature = 'recipe';
 
-  showSection(section: string) {
-    return this.section === section;
-  }
-
-  onSectionChanged(section: string) {
-    this.section = section;
+  onNavigate(feature: string) {
+    this.loadedFeature = feature;
   }
 }
