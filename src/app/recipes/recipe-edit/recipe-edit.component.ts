@@ -17,7 +17,7 @@ export class RecipeEditComponent implements OnInit {
   constructor(private recipeService: RecipeService,
               private activatedRoute: ActivatedRoute) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.params.subscribe(
       (params: Params) => {
         this.id = +params['id'];
