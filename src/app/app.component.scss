@@ -1,3 +1,13 @@
 .container {
-    padding: 12px;
+    .row {
+        h3 {
+            color: dodgerblue;
+
+            &.app-title {
+                padding: 10px 0px;
+                border-bottom: 1px solid darkblue;
+            }
+        }
+    }
+
 }

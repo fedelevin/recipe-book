@@ -1,0 +1,14 @@
+.server {
+    padding: 10px;
+    margin: 5px 0px;
+
+    &.online {
+        background-color: green;
+        color: white;
+    }
+    
+    &.offline {
+        background-color: red;
+        color: black;
+    }
+}
