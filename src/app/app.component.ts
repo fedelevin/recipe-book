@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { PostData } from './post-data.model';
 import {PostsService} from './posts.service';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -20,11 +21,17 @@ export class AppComponent implements OnInit {
     this.fetchPosts();
   }
 
-  onCreatePost(postData: PostData) {
+  onCreatePost(form: NgForm) {
+    const postData: PostData = {
+      title: form.value.title,
+      content: form.value.content
+    };
+
     this.postsService.createAndStorePost(postData.title, postData.content)
       .subscribe(responseData => {
         if (responseData) {
           this.fetchPosts();
+          form.reset();
         }
       });
   }
@@ -34,7 +41,9 @@ export class AppComponent implements OnInit {
   }
 
   onClearPosts() {
-    // Send Http request
+    this.postsService.clearPosts().subscribe(() => {
+      this.fetchPosts();
+    });
   }
 
   fetchPosts() {

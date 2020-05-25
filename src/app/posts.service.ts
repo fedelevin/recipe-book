@@ -43,4 +43,8 @@ export class PostsService {
         })
       );
   }
+
+  clearPosts() {
+    return this.httpClient.delete(this.postsURL);
+  }
 }
