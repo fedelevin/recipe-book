@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+
 import { PostData } from './post-data.model';
+import {PostsService} from './posts.service';
 
 @Component({
   selector: 'app-root',
@@ -9,24 +10,18 @@ import { PostData } from './post-data.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  private baseURL = 'https://angular-complete-guide-ca57c.firebaseio.com/';
-  private postsURL = this.baseURL + 'posts.json';
   loadedPosts: PostData[] = [];
   isFetching = false;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient,
+              private postsService: PostsService) {}
 
   ngOnInit() {
     this.fetchPosts();
   }
 
   onCreatePost(postData: PostData) {
-    // Send Http request
-    this.httpClient
-      .post<{ name: string }>(
-        this.postsURL,
-        postData
-      )
+    this.postsService.createAndStorePost(postData.title, postData.content)
       .subscribe(responseData => {
         if (responseData) {
           this.fetchPosts();
@@ -42,25 +37,13 @@ export class AppComponent implements OnInit {
     // Send Http request
   }
 
-  private fetchPosts() {
+  fetchPosts() {
     this.isFetching = true;
-    this.httpClient
-      .get<{ [key: string]: PostData }>(this.postsURL)
-      .pipe(
-        map(responseData => {
-          const postsArray: PostData[] = [];
-          for (const key in responseData) {
-            if (responseData.hasOwnProperty(key)) {
-              postsArray.push({...responseData[key], id: key});
-            }
-          }
-          return postsArray;
-        })
-      )
-      .subscribe(posts => {
-        this.loadedPosts = posts;
-        this.isFetching = false;
-      });
+
+    this.postsService.fetchPosts().subscribe(posts => {
+      this.loadedPosts = posts;
+      this.isFetching = false;
+    })
   }
 
   trackByKey(index: number, item: PostData) {
