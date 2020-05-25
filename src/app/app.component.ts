@@ -11,7 +11,7 @@ import { PostData } from './post-data.model';
 export class AppComponent implements OnInit {
   private baseURL = 'https://angular-complete-guide-ca57c.firebaseio.com/';
   private postsURL = this.baseURL + 'posts.json';
-  loadedPosts = [];
+  loadedPosts: PostData[] = [];
 
   constructor(private httpClient: HttpClient) {}
 
@@ -27,7 +27,9 @@ export class AppComponent implements OnInit {
         postData
       )
       .subscribe(responseData => {
-        console.log(responseData);
+        if (responseData) {
+          this.fetchPosts();
+        }
       });
   }
 
@@ -54,8 +56,12 @@ export class AppComponent implements OnInit {
           return postsArray;
         })
       )
-      .subscribe(responseData => {
-        console.log(responseData);
+      .subscribe(posts => {
+        this.loadedPosts = posts;
       });
+  }
+
+  trackByKey(index: number, item: PostData) {
+    return item.id;
   }
 }
