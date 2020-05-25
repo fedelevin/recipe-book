@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   private baseURL = 'https://angular-complete-guide-ca57c.firebaseio.com/';
   private postsURL = this.baseURL + 'posts.json';
   loadedPosts: PostData[] = [];
+  isFetching = false;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    // Send Http request
+    this.isFetching = true;
     this.httpClient
       .get<{ [key: string]: PostData }>(this.postsURL)
       .pipe(
@@ -58,6 +59,7 @@ export class AppComponent implements OnInit {
       )
       .subscribe(posts => {
         this.loadedPosts = posts;
+        this.isFetching = false;
       });
   }
 
