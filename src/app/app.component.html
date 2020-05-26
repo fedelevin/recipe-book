@@ -51,8 +51,13 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6 col-md-offset-3">
-      <div *ngIf="isFetching" class="progress">
+      <div *ngIf="isFetching && !error" class="progress">
         <div class="progress-bar progress-bar-striped active" style="width: 100%"></div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        <h3>An error ocurred!</h3>
+        <p>{{ error }}</p>
       </div>
 
       <p *ngIf="loadedPosts.length < 1 && !isFetching">No posts available!</p>

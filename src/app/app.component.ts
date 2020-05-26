@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 
 import { PostData } from './post-data.model';
 import {PostsService} from './posts.service';
@@ -13,6 +13,7 @@ import {NgForm} from '@angular/forms';
 export class AppComponent implements OnInit {
   loadedPosts: PostData[] = [];
   isFetching = false;
+  error = null;
 
   constructor(private httpClient: HttpClient,
               private postsService: PostsService) {}
@@ -50,9 +51,12 @@ export class AppComponent implements OnInit {
     this.isFetching = true;
 
     this.postsService.fetchPosts().subscribe(posts => {
+      this.error = null;
       this.loadedPosts = posts;
       this.isFetching = false;
-    })
+    }, (error: HttpErrorResponse) => {
+      this.error = error.message;
+    });
   }
 
   trackByKey(index: number, item: PostData) {
