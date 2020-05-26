@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Subject, throwError} from 'rxjs';
+import {map, catchError} from 'rxjs/operators';
 
 import {PostData} from './post-data.model';
 
@@ -10,6 +11,7 @@ import {PostData} from './post-data.model';
 export class PostsService {
   private baseURL = 'https://angular-complete-guide-ca57c.firebaseio.com/';
   private postsURL = this.baseURL + 'posts.json';
+  error = new Subject<string>();
 
   constructor(private httpClient: HttpClient) { }
 
@@ -19,11 +21,15 @@ export class PostsService {
       content: content
     };
 
-    return this.httpClient
+    this.httpClient
       .post<{ name: string }>(
         this.postsURL,
-        postData
-      );
+        postData)
+      .subscribe(responseData => {
+          console.log(responseData);
+      }, (error: HttpErrorResponse) => {
+        this.error.next(error.message);
+      });
   }
 
   fetchPosts() {
@@ -40,6 +46,9 @@ export class PostsService {
             }
           }
           return postsArray;
+        }),
+        catchError(errorResponse => {
+          return throwError(errorResponse);
         })
       );
   }

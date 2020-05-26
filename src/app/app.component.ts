@@ -1,25 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {NgForm} from '@angular/forms';
+import {Subscription} from 'rxjs';
 
 import { PostData } from './post-data.model';
 import {PostsService} from './posts.service';
-import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   loadedPosts: PostData[] = [];
   isFetching = false;
   error = null;
+  private errorSubscription: Subscription;
 
   constructor(private httpClient: HttpClient,
               private postsService: PostsService) {}
 
   ngOnInit() {
+    this.errorSubscription = this.postsService.error.subscribe(errorMessage => {
+      this.error = errorMessage;
+    });
     this.fetchPosts();
+  }
+
+  ngOnDestroy() {
+    this.errorSubscription.unsubscribe();
   }
 
   onCreatePost(form: NgForm) {
@@ -28,13 +37,7 @@ export class AppComponent implements OnInit {
       content: form.value.content
     };
 
-    this.postsService.createAndStorePost(postData.title, postData.content)
-      .subscribe(responseData => {
-        if (responseData) {
-          this.fetchPosts();
-          form.reset();
-        }
-      });
+    this.postsService.createAndStorePost(postData.title, postData.content);
   }
 
   onFetchPosts() {
