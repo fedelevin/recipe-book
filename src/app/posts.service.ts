@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Subject, throwError} from 'rxjs';
-import {map, catchError} from 'rxjs/operators';
+import {catchError, map, tap} from 'rxjs/operators';
 
 import {PostData} from './post-data.model';
 
@@ -24,7 +24,11 @@ export class PostsService {
     this.httpClient
       .post<{ name: string }>(
         this.postsURL,
-        postData)
+        postData,
+        {
+          observe: 'response'
+        }
+      )
       .subscribe(responseData => {
           console.log(responseData);
       }, (error: HttpErrorResponse) => {
@@ -33,9 +37,17 @@ export class PostsService {
   }
 
   fetchPosts() {
+    let searchParams = new HttpParams();
+    searchParams = searchParams.append('print', 'pretty');
+
     return this.httpClient
       .get<{ [key: string]: PostData }>(
-        this.postsURL
+        this.postsURL,
+        {
+          headers: new HttpHeaders({"Custom-Header": 'Hello'}),
+          params: searchParams,
+          responseType: 'json'
+        }
       )
       .pipe(
         map(responseData => {
@@ -54,6 +66,20 @@ export class PostsService {
   }
 
   clearPosts() {
-    return this.httpClient.delete(this.postsURL);
+    return this.httpClient
+      .delete(this.postsURL, {
+        observe: 'events'
+      })
+      .pipe(
+        tap(event => {
+          console.log(event);
+          if (event.type === HttpEventType.Sent) {
+            // ... waiting response
+          }
+          if (event.type === HttpEventType.Response) {
+            console.log(event.body);
+          }
+        })
+      );
   }
 }
