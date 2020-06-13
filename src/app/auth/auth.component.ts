@@ -43,8 +43,8 @@ export class AuthComponent {
   signup(email: string, password: string) {
     this.authService.signup(email, password).subscribe(resData => {
       console.log(resData);
-    }, error => {
-      this.error = 'An error occurred!';
+    }, errorMessage => {
+      this.error = errorMessage;
     });
   }
 
