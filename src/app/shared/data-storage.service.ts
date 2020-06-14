@@ -17,18 +17,14 @@ export class DataStorageService {
 
   storeRecipes() {
     const recipes = this.recipesService.getRecipes();
-    this.httpClient.put(this.recipesURL + '?auth=' + this.authService.userSubject.subscribe(user => user.token), recipes)
+    this.httpClient.put(this.recipesURL, recipes)
       .subscribe(response => {
         console.log(response);
       });
   }
 
   fetchRecipes() {
-    return this.authService.userSubject.pipe(
-      take(1),
-      exhaustMap(user => {
-        return this.httpClient.get<Recipe[]>(this.recipesURL, { params: new HttpParams().set('auth', user.token)});
-      }),
+    return this.httpClient.get<Recipe[]>(this.recipesURL).pipe(
       map(recipes => {
         return recipes.map(recipe => {
           return {
