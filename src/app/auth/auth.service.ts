@@ -30,6 +30,7 @@ export class AuthService {
     'USER_DISABLED': 'User is disabled'
   }
   userSubject = new BehaviorSubject<User>(null);
+  private tokenExpirationTimer: any;
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
@@ -82,19 +83,34 @@ export class AuthService {
 
     if (loadedUser.token) {
       this.userSubject.next(loadedUser);
+      const expirationDuration = new Date(userData._tokenExpiratonDate).getTime() - new Date().getTime();
+      this.autoLogout(expirationDuration);
     }
   }
 
   logout() {
     this.userSubject.next(null);
-    localStorage.setItem('userData', null);
+    localStorage.removeItem('userData');
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
+
     this.router.navigate(['/auth']);
+  }
+
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
   }
 
   private handleAuthentication(email: string, localId: string, idToken: string, expiresIn: number) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, localId, idToken, expirationDate);
     this.userSubject.next(user);
+    this.autoLogout(expiresIn * 1000);
+
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
