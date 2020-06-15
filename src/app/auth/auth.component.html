@@ -3,7 +3,9 @@
     <!--<div *ngIf="error" class="alert alert-danger">
       <p>{{ error }}</p>
     </div>-->
-    <app-alert *ngIf="error" [message]="error" (close)="onHandleErrorClose()"></app-alert>
+    <!--<app-alert *ngIf="error" [message]="error" (close)="onHandleErrorClose()"></app-alert>-->
+
+    <ng-template appPlaceholder></ng-template>
     <div *ngIf="isLoading">
       <loading-spinner></loading-spinner>
     </div>
