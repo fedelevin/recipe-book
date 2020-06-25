@@ -14,9 +14,7 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiKey = "AIzaSyAVm4fVw-U0IwghT730mmKlf1txBMxx2oU";
   private signUpURL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + this.apiKey;
