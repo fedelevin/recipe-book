@@ -1,9 +1,10 @@
-import {NgModule} from '@angular/core';
-import {DropdownDirective} from './dropdown.directive';
-import {LoadingSpinnerComponent} from './loader-spinner/loading-spinner.component';
-import {AlertComponent} from './alert/alert.component';
-import {PlaceholderDirective} from './placeholder/placeholder.directive';
-import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { DropdownDirective } from './dropdown.directive';
+import { LoadingSpinnerComponent } from './loader-spinner/loading-spinner.component';
+import { AlertComponent } from './alert/alert.component';
+import { PlaceholderDirective } from './placeholder/placeholder.directive';
 
 @NgModule({
   declarations: [
